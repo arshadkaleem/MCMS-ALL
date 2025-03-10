@@ -1,0 +1,62 @@
+﻿@model MCMS.Infrastructure.Models.Department
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<h1>Department Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Slug)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Slug)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.CollegeType)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CollegeType)
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Faculties != null && Model.Faculties.Any())
+{
+    <h3>Faculty Members</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Post</th>
+                <th>Joining Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faculty in Model.Faculties)
+            {
+                <tr>
+                    <td>@(faculty.FirstName + " " + faculty.LastName)</td>
+                    <td>@faculty.Email</td>
+                    <td>@faculty.Post</td>
+                    <td>@faculty.JoiningDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepartmentId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

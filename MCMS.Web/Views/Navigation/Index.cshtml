@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MCMS.Infrastructure.Models.NavigationMenu>
+
+@{
+    ViewData["Title"] = "Menu Management";
+}
+
+<div class="container-fluid">
+    <h2>Menu Management</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Menu Locations</h5>
+                </div>
+                <div class="card-body">
+                    <p>Create and manage navigation menus for different locations on your site.</p>
+                    <div class="d-grid">
+                        <a asp-action="CreateMenu" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create New Menu
+                        </a>
+                    </div>
+                    <hr />
+                    <div class="list-group">
+                        @foreach (var menu in Model)
+                        {
+                            <a asp-action="EditMenu" asp-route-id="@menu.MenuId"
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                @menu.MenuName
+                                @if (menu.IsActive == true)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>About Menus</h5>
+                </div>
+                <div class="card-body">
+                    <p>To get started with menu management:</p>
+                    <ol>
+                        <li>Create a new menu or select an existing one to edit</li>
+                        <li>Add items to your menu from pages, custom links, or categories</li>
+                        <li>Arrange and organize your menu items by dragging and dropping</li>
+                        <li>Set a menu as active to display it on your site</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> You can create multiple menus but only one can be active at a time for each location.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

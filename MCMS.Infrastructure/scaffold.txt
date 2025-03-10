@@ -1,0 +1,4 @@
+﻿Scaffold-DbContext "Server=your_server;Database=MCMS;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context MCMSDbContext -Force
+
+
+Scaffold-DbContext "Server=AZLAAN\SQLEXPRESS;Database=MCMS;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context College365DbContext Categories, Classrooms, Courses, Departments, Faculty, FacultyAwards, FacultyBooks, FacultyEducation, FacultyExperience, FacultyResearch, FacultySubjects, FacultyWorkshops, MediaFiles, MediaFileTags, MediaRelations, MediaTags, NAACCriteria, NAACData, NAACFeedback, NAACMetrics, NAACReports, NavigationItems, NavigationMenus, StaticPages, Subjects, Timetable, TimetableSlots  -DataAnnotations -Force

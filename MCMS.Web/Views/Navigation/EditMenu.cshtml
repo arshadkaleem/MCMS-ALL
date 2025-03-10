@@ -1,0 +1,226 @@
+﻿@model MCMS.Infrastructure.Models.NavigationMenu
+
+@{
+    ViewData["Title"] = "Edit Menu - " + Model.MenuName;
+    var menuItems = ViewBag.MenuItems as List<MCMS.Infrastructure.Models.NavigationItem> ?? new List<MCMS.Infrastructure.Models.NavigationItem>();
+    var availablePages = ViewBag.AvailablePages as List<MCMS.Infrastructure.Models.StaticPage> ?? new List<MCMS.Infrastructure.Models.StaticPage>();
+    var categories = ViewBag.Categories as List<MCMS.Infrastructure.Models.Category> ?? new List<MCMS.Infrastructure.Models.Category>();
+}
+
+<div class="container-fluid">
+    <h2>Edit Menu: @Model.MenuName</h2>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Menu Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Menu Settings</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateMenu">
+                        <input type="hidden" asp-for="MenuId" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="MenuName" class="control-label">Menu Name</label>
+                            <input asp-for="MenuName" class="form-control" />
+                            <span asp-validation-for="MenuName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <label asp-for="IsActive" class="form-check-label">Set as Active Menu</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Save Menu Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Add Pages -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Add Pages</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddMenuItems" method="post">
+                        <input type="hidden" name="MenuId" value="@Model.MenuId" />
+                        <input type="hidden" name="ItemType" value="Page" />
+                        
+                        <div class="form-group mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" id="selectAllPages" class="form-check-input" />
+                                <label class="form-check-label" for="selectAllPages">Select All</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var pageItem in availablePages)
+                            {
+                                <div class="form-check">
+                                    <input type="checkbox" name="SelectedPages" value="@pageItem.PageId" class="form-check-input page-checkbox" />
+                                    <label class="form-check-label">@pageItem.Title</label>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-sm">Add to Menu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Add Custom Link -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Add Custom Link</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddCustomLink" method="post">
+                        <input type="hidden" name="MenuId" value="@Model.MenuId" />
+                        
+                        <div class="form-group mb-3">
+                            <label class="control-label">URL</label>
+                            <input type="text" name="Url" class="form-control" placeholder="https://" />
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label class="control-label">Link Text</label>
+                            <input type="text" name="LinkText" class="form-control" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-sm">Add to Menu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Add Categories -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Add Categories</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddMenuItems" method="post">
+                        <input type="hidden" name="MenuId" value="@Model.MenuId" />
+                        <input type="hidden" name="ItemType" value="Category" />
+                        
+                        <div class="form-group mb-3" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var category in categories)
+                            {
+                                <div class="form-check">
+                                    <input type="checkbox" name="SelectedCategories" value="@category.CategoryId" class="form-check-input" />
+                                    <label class="form-check-label">@category.CategoryName</label>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-sm">Add to Menu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <!-- Menu Structure -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Menu Structure</h5>
+                </div>
+                <div class="card-body">
+                    @if (menuItems.Any())
+                    {
+                        <form asp-action="SaveMenuStructure" method="post" id="menuStructureForm">
+                            <input type="hidden" name="MenuId" value="@Model.MenuId" />
+                            <input type="hidden" name="MenuStructure" id="menuStructureJson" />
+                            
+                            <div class="dd" id="nestable">
+                                <ol class="dd-list">
+                                    @await Html.PartialAsync("_MenuItemsPartial", menuItems.Where(i => i.ParentId == null).OrderBy(i => i.OrderIndex).ToList())
+                                </ol>
+                            </div>
+                            
+                            <div class="form-group mt-3">
+                                <button type="button" id="saveMenuStructure" class="btn btn-primary">Save Menu Structure</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> This menu has no items yet. Add some items using the options on the left.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Partial view for recursive menu items -->
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/nestable2@1.6.0/jquery.nestable.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nestable2@1.6.0/jquery.nestable.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize Nestable for drag and drop menu organization
+            var updateOutput = function(e) {
+                var list = e.length ? e : $(e.target);
+                var menuStructure = window.JSON.stringify(list.nestable('serialize'));
+                $('#menuStructureJson').val(menuStructure);
+            };
+            
+            $('#nestable').nestable({
+                group: 1,
+                maxDepth: 2  // Limit menu depth to 2 levels
+            }).on('change', updateOutput);
+            
+            // Initial serialization
+            updateOutput($('#nestable').data('output', $('#menuStructureJson')));
+            
+            // Save menu structure
+            $('#saveMenuStructure').click(function() {
+                // Update the hidden input with the current structure
+                var menuStructure = window.JSON.stringify($('#nestable').nestable('serialize'));
+                $('#menuStructureJson').val(menuStructure);
+                
+                // Submit the form
+                $('#menuStructureForm').submit();
+            });
+            
+            // Select all pages checkbox
+            $('#selectAllPages').change(function() {
+                $('.page-checkbox').prop('checked', $(this).prop('checked'));
+            });
+            
+            // Menu item edit button functionality
+            $(document).on('click', '.edit-menu-item', function(e) {
+                e.preventDefault();
+                
+                var $item = $(this).closest('.dd-item');
+                var $editForm = $item.find('.menu-item-edit-form');
+                
+                $editForm.slideToggle();
+            });
+            
+            // Menu item delete confirmation
+            $(document).on('click', '.delete-menu-item', function(e) {
+                e.preventDefault();
+                
+                if (confirm('Are you sure you want to remove this menu item?')) {
+                    window.location = $(this).attr('href');
+                }
+            });
+        });
+    </script>
+}

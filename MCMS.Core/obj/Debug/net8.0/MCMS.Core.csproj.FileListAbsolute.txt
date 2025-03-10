@@ -1,0 +1,12 @@
+E:\MCMS\MCMS.Core\bin\Debug\net8.0\MCMS.Core.deps.json
+E:\MCMS\MCMS.Core\bin\Debug\net8.0\MCMS.Core.dll
+E:\MCMS\MCMS.Core\bin\Debug\net8.0\MCMS.Core.pdb
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.csproj.AssemblyReference.cache
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.AssemblyInfoInputs.cache
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.AssemblyInfo.cs
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.csproj.CoreCompileInputs.cache
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.dll
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\refint\MCMS.Core.dll
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\MCMS.Core.pdb
+E:\MCMS\MCMS.Core\obj\Debug\net8.0\ref\MCMS.Core.dll

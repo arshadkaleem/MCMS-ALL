@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MCMS.Infrastructure.Models.Faculty>
+
+@{
+    ViewData["Title"] = "Faculty";
+}
+
+<h1>Faculty Members</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Faculty</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Post</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                <td>@(item.FirstName + " " + item.LastName)</td>
+                <td>@item.Email</td>
+                <td>@(item.Department?.DepartmentName ?? "N/A")</td>
+                <td>@item.Post</td>
+                <td>@(item.IsDeleted ? "Inactive" : "Active")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.FacultyId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.FacultyId" class="btn btn-sm btn-info">Details</a>
+                    @if (!item.IsDeleted)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.FacultyId" class="btn btn-sm btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Restore" asp-route-id="@item.FacultyId" class="btn btn-sm btn-success">Restore</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

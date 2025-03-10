@@ -1,0 +1,94 @@
+﻿@model MCMS.Infrastructure.Models.Faculty
+
+@{
+    ViewData["Title"] = "Faculty Details";
+}
+
+<h1>Faculty Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@(Model.FirstName + " " + Model.LastName)</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone Number</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-3">Department</dt>
+        <dd class="col-sm-9">@(Model.Department?.DepartmentName ?? "N/A")</dd>
+
+        <dt class="col-sm-3">Position</dt>
+        <dd class="col-sm-9">@Model.Post</dd>
+
+        <dt class="col-sm-3">Joining Date</dt>
+        <dd class="col-sm-9">@Model.JoiningDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-3">Head of Department</dt>
+        <dd class="col-sm-9">@(Model.IsHod == true ? "Yes" : "No")</dd>
+
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">
+            @Model.Address<br />
+            @Model.City, @Model.State @Model.ZipCode
+        </dd>
+    </dl>
+</div>
+
+@if (Model.FacultyEducations != null && Model.FacultyEducations.Any())
+{
+        <h3 class="mt-4">Education</h3>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Degree</th>
+                    <th>Field of Study</th>
+                    <th>Institution</th>
+                    <th>Year of Completion</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var education in Model.FacultyEducations)
+            {
+                        <tr>
+                            <td>@education.Degree</td>
+                            <td>@education.FieldOfStudy</td>
+                            <td>@education.Institution</td>
+                            <td>@education.YearOfCompletion</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+@if (Model.FacultySubjects != null && Model.FacultySubjects.Any())
+{
+        <h3 class="mt-4">Teaching Subjects</h3>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Subject</th>
+                    <th>Academic Year</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var subject in Model.FacultySubjects)
+            {
+                        <tr>
+                            <td>@(subject.Subject?.SubjectName ?? "N/A")</td>
+                            <td>@subject.AcademicYear</td>
+                            <td>@subject.Semester</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.FacultyId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

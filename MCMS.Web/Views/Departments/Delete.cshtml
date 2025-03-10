@@ -1,0 +1,38 @@
+﻿@model MCMS.Infrastructure.Models.Department
+
+@{
+    ViewData["Title"] = "Delete Department";
+}
+
+<h1>Delete Department</h1>
+
+<h3>Are you sure you want to delete this department?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Slug)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Slug)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.CollegeType)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CollegeType)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DepartmentId" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,74 @@
+﻿@model MCMS.Infrastructure.Models.NavigationMenu
+
+@{
+    ViewData["Title"] = "Create Menu";
+}
+
+<div class="container-fluid">
+    <h2>Create New Menu</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Menu Details</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateMenu">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="MenuName" class="control-label">Menu Name</label>
+                            <input asp-for="MenuName" class="form-control" placeholder="e.g. Main Menu, Footer Menu" />
+                            <span asp-validation-for="MenuName" class="text-danger"></span>
+                            <small class="form-text text-muted">Give your menu a name that describes its location or purpose.</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <label asp-for="IsActive" class="form-check-label">Set as Active Menu</label>
+                                <small class="form-text text-muted d-block">If checked, this menu will be displayed on your site.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Menu
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>About Menus</h5>
+                </div>
+                <div class="card-body">
+                    <p>Navigation menus allow you to organize your site's structure and help visitors find content.</p>
+                    <p>After creating a menu, you can:</p>
+                    <ul>
+                        <li>Add pages, categories, or custom links</li>
+                        <li>Organize items by dragging and dropping</li>
+                        <li>Create multi-level navigation</li>
+                        <li>Control user access to specific menu items</li>
+                    </ul>
+                    <p><strong>Note:</strong> Only one menu can be active at a time. Setting this menu as active will deactivate any other active menus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

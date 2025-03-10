@@ -1,0 +1,61 @@
+﻿@model MCMS.Infrastructure.Models.Subject
+
+@{
+    ViewData["Title"] = "Subject Details";
+}
+
+<h1>Subject Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Subject Name</dt>
+        <dd class="col-sm-9">@Model.SubjectName</dd>
+
+        <dt class="col-sm-3">Slug</dt>
+        <dd class="col-sm-9">@Model.Slug</dd>
+
+        <dt class="col-sm-3">Course</dt>
+        <dd class="col-sm-9">@(Model.Course?.CourseName ?? "N/A")</dd>
+
+        <dt class="col-sm-3">Department</dt>
+        <dd class="col-sm-9">@(Model.Department?.DepartmentName ?? "N/A")</dd>
+
+        <dt class="col-sm-3">Credits</dt>
+        <dd class="col-sm-9">@Model.Credits</dd>
+
+        <dt class="col-sm-3">Semester</dt>
+        <dd class="col-sm-9">@Model.Semester</dd>
+    </dl>
+</div>
+
+@if (Model.FacultySubjects != null && Model.FacultySubjects.Any())
+{
+    <h3 class="mt-4">Faculty Teaching This Subject</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Academic Year</th>
+                <th>Semester</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faculty in Model.FacultySubjects)
+            {
+                <tr>
+                    <td>@(faculty.Faculty?.FirstName + " " + faculty.Faculty?.LastName)</td>
+                    <td>@faculty.Faculty?.Email</td>
+                    <td>@faculty.AcademicYear</td>
+                    <td>@faculty.Semester</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SubjectId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

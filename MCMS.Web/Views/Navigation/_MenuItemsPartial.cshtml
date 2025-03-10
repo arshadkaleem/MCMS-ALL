@@ -1,0 +1,68 @@
+﻿@model List<MCMS.Infrastructure.Models.NavigationItem>
+
+@foreach (var item in Model)
+{
+    <li class="dd-item" data-id="@item.ItemId">
+        <div class="dd-handle">@item.Title</div>
+        <div class="dd-item-actions">
+            <a href="#" class="edit-menu-item btn btn-sm btn-link">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a asp-action="DeleteMenuItem" asp-route-id="@item.ItemId" class="delete-menu-item btn btn-sm btn-link text-danger">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+        
+        <div class="menu-item-edit-form" style="display: none; padding: 10px; background: #f8f9fa; margin-top: 5px;">
+            <form asp-action="UpdateMenuItem" method="post">
+                <input type="hidden" name="ItemId" value="@item.ItemId" />
+                <input type="hidden" name="MenuId" value="@item.MenuId" />
+                
+                <div class="form-group mb-2">
+                    <label>Navigation Label</label>
+                    <input type="text" name="Title" value="@item.Title" class="form-control form-control-sm" />
+                </div>
+                
+                @if (!string.IsNullOrEmpty(item.ExternalUrl))
+                {
+                    <div class="form-group mb-2">
+                        <label>URL</label>
+                        <input type="text" name="ExternalUrl" value="@item.ExternalUrl" class="form-control form-control-sm" />
+                    </div>
+                }
+                
+                <div class="form-group mb-2">
+                    <label>Access Role</label>
+
+                   @*  <select name="RoleAccess" class="form-control form-control-sm">
+    <option value="Public" @(item.RoleAccess == "Public" ? "selected" : "")>Public</option>
+    <option value="Student" @(item.RoleAccess == "Student" ? "selected" : "")>Student</option>
+    <option value="Faculty" @(item.RoleAccess == "Faculty" ? "selected" : "")>Faculty</option>
+    <option value="Admin" @(item.RoleAccess == "Admin" ? "selected" : "")>Admin</option>
+</select> *@
+
+
+
+
+                   @*  <select name="RoleAccess" class="form-control form-control-sm">
+                        <option value="Public" @(item.RoleAccess == "Public" ? "selected" : "")>Public</option>
+                        <option value="Student" @(item.RoleAccess == "Student" ? "selected" : "")>Student</option>
+                        <option value="Faculty" @(item.RoleAccess == "Faculty" ? "selected" : "")>Faculty</option>
+                        <option value="Admin" @(item.RoleAccess == "Admin" ? "selected" : "")>Admin</option>
+                    </select> *@
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </div>
+            </form>
+        </div>
+
+        @if (item.InverseParent != null && item.InverseParent.Any())
+        {
+            <ol class="dd-list">
+                @await Html.PartialAsync("_MenuItemsPartial", item.InverseParent.OrderBy(i => i.OrderIndex).ToList())
+            </ol>
+        }
+    </li>
+}
