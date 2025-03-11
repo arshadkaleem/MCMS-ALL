@@ -96,3 +96,4 @@ E:\MCMS\MCMS.Web\obj\Debug\net8.0\refint\MCMS.Web.dll
 E:\MCMS\MCMS.Web\obj\Debug\net8.0\MCMS.Web.pdb
 E:\MCMS\MCMS.Web\obj\Debug\net8.0\MCMS.Web.genruntimeconfig.cache
 E:\MCMS\MCMS.Web\obj\Debug\net8.0\ref\MCMS.Web.dll
+E:\MCMS\MCMS.Web\obj\Debug\net8.0\MCMS.Web.sourcelink.json

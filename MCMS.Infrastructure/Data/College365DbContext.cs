@@ -74,6 +74,8 @@ namespace MCMS.Infrastructure.Data
         public virtual DbSet<TimetableSlot> TimetableSlots { get; set; }
 
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>(entity =>
@@ -412,9 +414,14 @@ namespace MCMS.Infrastructure.Data
             });
 
             // Configure soft delete filter for users if needed
-            //modelBuilder.Entity<IdentityUser>().HasQueryFilter(u => !u.IsDeleted);
-
-
+            // Ensure Identity table names are correct
+            modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers");
+            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");  // ✅ Corrected this
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
 
 
 

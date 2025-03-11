@@ -23,3 +23,4 @@ E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\refint\MCMS.Infrastructure.dll
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.pdb
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.genruntimeconfig.cache
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\ref\MCMS.Infrastructure.dll
+E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.sourcelink.json

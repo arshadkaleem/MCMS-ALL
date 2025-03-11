@@ -13,10 +13,11 @@ namespace MCMS.Web.Controllers
     public class FacultyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public FacultyController(IUnitOfWork unitOfWork)
+        private readonly UserManager<IdentityUser> _userManager;
+        public FacultyController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         // GET: Faculty
@@ -47,11 +48,10 @@ namespace MCMS.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var departments = await _unitOfWork.Departments.GetAllAsync();
-            ViewData["DepartmentId"] = new SelectList(departments, "DepartmentId", "DepartmentName");
+            ViewData["DepartmentId"] = new SelectList(departments.OrderBy(d => d.DepartmentName), "DepartmentId", "DepartmentName");
             return View();
         }
 
-        // POST: Faculty/Create
         // POST: Faculty/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,7 +65,7 @@ namespace MCMS.Web.Controllers
                 try
                 {
                     // 1. Create the identity user
-                    var user = new ApplicationUser
+                    var user = new IdentityUser
                     {
                         UserName = model.Email,
                         Email = model.Email,
@@ -78,6 +78,7 @@ namespace MCMS.Web.Controllers
                     {
                         // 2. Assign the "Faculty" role to the user
                         await _userManager.AddToRoleAsync(user, "Faculty");
+                        await _userManager.AddToRoleAsync(user, "DepartmentHOD");
 
                         // 3. Create the faculty record with only required fields
                         var faculty = new Faculty
@@ -87,8 +88,8 @@ namespace MCMS.Web.Controllers
                             Email = model.Email,
                             Post = model.Post,
                             DepartmentId = model.DepartmentId,
-                            JoiningDate = model.JoiningDate,
-                            IsHOD = model.IsHOD,
+                            JoiningDate = DateOnly.FromDateTime(model.JoiningDate), // Convert DateTime to DateOnly model.JoiningDate,
+                            IsHod = model.IsHOD,
                             CreatedAt = DateTime.Now,
                             UserId = user.Id,
                             IsDeleted = false
@@ -108,13 +109,13 @@ namespace MCMS.Web.Controllers
                                 var existingHod = await _unitOfWork.Faculty.GetByIdAsync(department.Hodid.Value);
                                 if (existingHod != null)
                                 {
-                                    existingHod.IsHOD = false;
+                                    existingHod.IsHod = false;
                                     await _unitOfWork.Faculty.UpdateAsync(existingHod);
                                 }
                             }
 
                             // Update the department with the new HOD
-                            department.HODId = faculty.FacultyId;
+                            department.Hodid = faculty.FacultyId;
                             department.UpdatedAt = DateTime.Now;
                             await _unitOfWork.Departments.UpdateAsync(department);
                             await _unitOfWork.CompleteAsync();
@@ -134,7 +135,10 @@ namespace MCMS.Web.Controllers
                 }
                 catch (Exception ex)
                 {
+                    var departmentsV = await _unitOfWork.Departments.GetAllAsync();
+                    ViewData["DepartmentId"] = new SelectList(departmentsV.OrderBy(d => d.DepartmentName), "DepartmentId", "DepartmentName");
                     ModelState.AddModelError(string.Empty, "An error occurred while creating the faculty member.");
+                    ModelState.AddModelError(string.Empty,ex.InnerException.Message);
                     await _unitOfWork.RollbackTransactionAsync();
                 }
             }

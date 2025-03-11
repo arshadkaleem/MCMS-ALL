@@ -51,11 +51,24 @@ namespace MCMS.Web.Controllers
         // POST: Departments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DepartmentName,Slug,CollegeType")] Department department)
+        public async Task<IActionResult> Create([Bind("DepartmentName,CollegeType")] Department department)
         {
             department.IsDeleted = false;
             department.CreatedAt = DateTime.Now;
             department.Slug = StringUtils.GenerateSlug(department.DepartmentName);
+
+            var exists = await _unitOfWork.Departments.GetAllAsync();
+
+
+            if (exists.Where(d => d.CollegeType == department.CollegeType && d.DepartmentName == department.DepartmentName).Count() > 0)
+            {
+                ModelState.AddModelError("Department", "This Department already exists.");
+            }
+            else if (exists.Where(d => d.Slug == department.Slug).Count() > 0)
+            {
+                ModelState.AddModelError("Slug", "This slug is already in use. Please choose another one.");
+            }
+            ModelState.Remove("Slug");
 
             if (ModelState.IsValid)
             {                

@@ -14,7 +14,7 @@ builder.Services.AddDbContext<College365DbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     // Password settings
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
