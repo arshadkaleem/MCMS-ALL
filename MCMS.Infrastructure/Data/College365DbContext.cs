@@ -285,8 +285,8 @@ namespace MCMS.Infrastructure.Data
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
                 // Enforce the RoleAccess constraint
-                entity.HasCheckConstraint("CK_NavigationItems_RoleAccess",
-                    "[RoleAccess] IN ('Admin', 'Faculty', 'Student', 'Public')");
+                //entity.HasCheckConstraint("CK_NavigationItems_RoleAccess",
+                //    "[RoleAccess] IN ('Admin', 'Faculty', 'Student', 'Public')");
 
                 entity.HasOne(d => d.Menu).WithMany(p => p.NavigationItems)
                     .HasForeignKey(d => d.MenuId)
