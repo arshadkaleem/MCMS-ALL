@@ -58,5 +58,10 @@ namespace MCMS.Infrastructure.Repositories.Implementations
                 new Microsoft.Data.SqlClient.SqlParameter("@FacultyId", facultyId));
             return true;
         }
+
+        public async Task<IEnumerable<Faculty>> GetAllFacultiesAsync()
+        {
+            return await _context.Faculties.Include(f => f.Department).OrderBy(d=> d.Department.DepartmentName).ToListAsync();
+        }
     }
 }

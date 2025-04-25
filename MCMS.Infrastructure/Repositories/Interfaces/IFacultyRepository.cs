@@ -9,6 +9,7 @@ namespace MCMS.Infrastructure.Repositories.Interfaces
 {
     public interface IFacultyRepository : IRepository<Faculty>
     {
+        Task<IEnumerable<Faculty>> GetAllFacultiesAsync();
         Task<Faculty> GetFacultyWithDepartmentAsync(int facultyId);
         Task<IReadOnlyList<Faculty>> GetFacultyByDepartmentAsync(int departmentId);
         Task<Faculty> GetFacultyWithEducationHistoryAsync(int facultyId);

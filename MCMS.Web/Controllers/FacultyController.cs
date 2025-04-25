@@ -7,6 +7,7 @@ using MCMS.Infrastructure.Repositories.Interfaces;
 using MCMS.Web.Models.Dtos;
 using MCMS.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MCMS.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace MCMS.Web.Controllers
         // GET: Faculty
         public async Task<IActionResult> Index()
         {
-            var faculty = await _unitOfWork.Faculty.GetAllAsync();
+            var faculty = await _unitOfWork.Faculty.GetAllFacultiesAsync();
             return View(faculty);
         }
 
@@ -45,6 +46,7 @@ namespace MCMS.Web.Controllers
         }
 
         // GET: Faculty/Create
+        [Authorize(Roles = "Admin, DepartmentHOD")]
         public async Task<IActionResult> Create()
         {
             var departments = await _unitOfWork.Departments.GetAllAsync();
@@ -55,6 +57,7 @@ namespace MCMS.Web.Controllers
         // POST: Faculty/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, DepartmentHOD")]
         public async Task<IActionResult> Create(FacultyCreateDto model)
         {
             if (ModelState.IsValid)
@@ -78,7 +81,19 @@ namespace MCMS.Web.Controllers
                     {
                         // 2. Assign the "Faculty" role to the user
                         await _userManager.AddToRoleAsync(user, "Faculty");
-                        await _userManager.AddToRoleAsync(user, "DepartmentHOD");
+
+                        if (User.IsInRole("Admin"))
+                        {
+                            // User is an admin, can add hod
+                            await _userManager.AddToRoleAsync(user, "DepartmentHOD");
+                        }
+                        if (User.IsInRole("DepartmentHOD"))
+                        {
+                            var departmentHOD = await _unitOfWork.Faculty.GetAllAsync();
+                            var currentUser = await _userManager.GetUserAsync(User);
+                            model.DepartmentId = departmentHOD.FirstOrDefault(d => d.UserId == currentUser.Id).DepartmentId;
+                        }
+
 
                         // 3. Create the faculty record with only required fields
                         var faculty = new Faculty
@@ -138,7 +153,7 @@ namespace MCMS.Web.Controllers
                     var departmentsV = await _unitOfWork.Departments.GetAllAsync();
                     ViewData["DepartmentId"] = new SelectList(departmentsV.OrderBy(d => d.DepartmentName), "DepartmentId", "DepartmentName");
                     ModelState.AddModelError(string.Empty, "An error occurred while creating the faculty member.");
-                    ModelState.AddModelError(string.Empty,ex.InnerException.Message);
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     await _unitOfWork.RollbackTransactionAsync();
                 }
             }
@@ -151,23 +166,7 @@ namespace MCMS.Web.Controllers
 
 
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,PhoneNumber,Post,DepartmentId,Address,City,State,ZipCode,JoiningDate,IsHOD")] Faculty faculty)
-        //{
-        //    faculty.IsDeleted = false;
-        //    faculty.CreatedAt = DateTime.Now;
-        //    if (ModelState.IsValid)
-        //    {
-        //        await _unitOfWork.Faculty.AddAsync(faculty);
-        //        await _unitOfWork.CompleteAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    var departments = await _unitOfWork.Departments.GetAllAsync();
-        //    ViewData["DepartmentId"] = new SelectList(departments, "DepartmentId", "DepartmentName", faculty.DepartmentId);
-        //    return View(faculty);
-        //}
-
+       
         // GET: Faculty/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -195,6 +194,8 @@ namespace MCMS.Web.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Department");
 
             if (ModelState.IsValid)
             {

@@ -1,0 +1,53 @@
+/* MCMS.Web/wwwroot/css/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Light theme variables */
+    --tw-primary: #1B84FF;
+    --tw-primary-active: #056EE9;
+    --tw-primary-light: #EFF6FF;
+    --tw-primary-clarity: rgba(27, 132, 255, 0.20);
+    --tw-primary-inverse: #ffffff;
+    --tw-success: #17C653;
+    --tw-success-active: #04B440;
+    --tw-success-light: #EAFFF1;
+    --tw-success-clarity: rgba(23, 198, 83, 0.20);
+    --tw-success-inverse: #ffffff;
+    /* Add other theme variables based on your tailwind config */
+    /* Gray scale */
+    --tw-gray-100: #F9F9F9;
+    --tw-gray-200: #F1F1F4;
+    --tw-gray-300: #DBDFE9;
+    --tw-gray-400: #C4CADA;
+    --tw-gray-500: #99A1B7;
+    --tw-gray-600: #78829D;
+    --tw-gray-700: #4B5675;
+    --tw-gray-800: #252F4A;
+    --tw-gray-900: #071437;
+    /* Box shadows */
+    --tw-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03);
+    --tw-default-box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.09);
+    /* Add other box shadow variables */
+}
+
+.dark {
+    /* Dark theme variables */
+    --tw-primary: #006AE6;
+    --tw-primary-active: #107EFF;
+    --tw-primary-light: #172331;
+    --tw-primary-clarity: rgba(0, 106, 230, 0.20);
+    --tw-primary-inverse: #ffffff;
+    /* Add other dark theme variables */
+    /* Gray scale */
+    --tw-gray-100: #1B1C22;
+    --tw-gray-200: #26272F;
+    --tw-gray-300: #363843;
+    --tw-gray-400: #464852;
+    --tw-gray-500: #636674;
+    --tw-gray-600: #808290;
+    --tw-gray-700: #9A9CAE;
+    --tw-gray-800: #B5B7C8;
+    --tw-gray-900: #F5F5F5;
+}

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Hw6xnSolZpoeVECq7VGd8LI+DmWDibAflD+X3T731yw=",
+  "Hash": "/G7NxprtPY5bD4jYQPFCjtBSnouqaD19yAAk89QHRXE=",
   "Source": "MCMS.Web",
   "BasePath": "_content/MCMS.Web",
   "Mode": "Default",
@@ -85,11 +85,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "c2tiyv64ts",
-      "Integrity": "pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=",
+      "Fingerprint": "9xt9h8cozz",
+      "Integrity": "Q28m8TGMTsqwgB0OaJ731bQtRN0CtXiksx9pLE4J9/c=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "E:\\MCMS\\MCMS.Web\\wwwroot\\css\\styles.css",
+      "SourceId": "MCMS.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\MCMS\\MCMS.Web\\wwwroot\\",
+      "BasePath": "_content/MCMS.Web",
+      "RelativePath": "css/styles#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "b2mdtea4mu",
+      "Integrity": "DXpMvnJqtAbFCTp701TZ+YbomeQNYNiIvGxMh39k2QY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\styles.css"
     },
     {
       "Identity": "E:\\MCMS\\MCMS.Web\\wwwroot\\favicon.ico",
@@ -1333,7 +1354,7 @@
   ],
   "Endpoints": [
     {
-      "Route": "css/site.c2tiyv64ts.css",
+      "Route": "css/site.9xt9h8cozz.css",
       "AssetFile": "E:\\MCMS\\MCMS.Web\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1343,7 +1364,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "362"
+          "Value": "103"
         },
         {
           "Name": "Content-Type",
@@ -1351,11 +1372,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=\""
+          "Value": "\"Q28m8TGMTsqwgB0OaJ731bQtRN0CtXiksx9pLE4J9/c=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 17:40:02 GMT"
+          "Value": "Tue, 11 Mar 2025 20:00:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1365,7 +1386,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "c2tiyv64ts"
+          "Value": "9xt9h8cozz"
         },
         {
           "Name": "label",
@@ -1373,7 +1394,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0="
+          "Value": "sha256-Q28m8TGMTsqwgB0OaJ731bQtRN0CtXiksx9pLE4J9/c="
         }
       ]
     },
@@ -1388,7 +1409,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "362"
+          "Value": "103"
         },
         {
           "Name": "Content-Type",
@@ -1396,11 +1417,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=\""
+          "Value": "\"Q28m8TGMTsqwgB0OaJ731bQtRN0CtXiksx9pLE4J9/c=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 17:40:02 GMT"
+          "Value": "Tue, 11 Mar 2025 20:00:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1410,7 +1431,89 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0="
+          "Value": "sha256-Q28m8TGMTsqwgB0OaJ731bQtRN0CtXiksx9pLE4J9/c="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.b2mdtea4mu.css",
+      "AssetFile": "E:\\MCMS\\MCMS.Web\\wwwroot\\css\\styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17583"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DXpMvnJqtAbFCTp701TZ+YbomeQNYNiIvGxMh39k2QY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 11 Mar 2025 20:09:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b2mdtea4mu"
+        },
+        {
+          "Name": "label",
+          "Value": "css/styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DXpMvnJqtAbFCTp701TZ+YbomeQNYNiIvGxMh39k2QY="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.css",
+      "AssetFile": "E:\\MCMS\\MCMS.Web\\wwwroot\\css\\styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17583"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DXpMvnJqtAbFCTp701TZ+YbomeQNYNiIvGxMh39k2QY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 11 Mar 2025 20:09:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DXpMvnJqtAbFCTp701TZ+YbomeQNYNiIvGxMh39k2QY="
         }
       ]
     },

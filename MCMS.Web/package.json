@@ -1,0 +1,14 @@
+{
+  "name": "mcms-web",
+  "version": "1.0.0",
+  "description": "College Content Management System",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./wwwroot/css/styles.css -o ./wwwroot/css/styles.min.css",
+    "watch:css": "npx tailwindcss -i ./wwwroot/css/styles.css -o ./wwwroot/css/styles.min.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.14",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49"
+  }
+}
