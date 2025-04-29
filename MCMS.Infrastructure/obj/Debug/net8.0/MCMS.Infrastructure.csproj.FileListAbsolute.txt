@@ -17,10 +17,10 @@ E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.GeneratedMSBuil
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.AssemblyInfoInputs.cache
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.AssemblyInfo.cs
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.csproj.CoreCompileInputs.cache
+E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.sourcelink.json
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Inf.AB6CAE16.Up2Date
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.dll
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\refint\MCMS.Infrastructure.dll
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.pdb
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.genruntimeconfig.cache
 E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\ref\MCMS.Infrastructure.dll
-E:\MCMS\MCMS.Infrastructure\obj\Debug\net8.0\MCMS.Infrastructure.sourcelink.json

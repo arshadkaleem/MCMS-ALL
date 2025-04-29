@@ -1,0 +1,167 @@
+﻿@model MCMS.Infrastructure.Models.Course
+@{
+    ViewData["Title"] = "Course Details";
+    ViewData["Subtitle"] = "View complete information about the course";
+}
+
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 text-dark fw-bold">Course Information</h5>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.CourseId" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Course Name</label>
+                            <p class="fs-5">@Html.DisplayFor(model => model.CourseName)</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">URL Slug</label>
+                            <p class="fs-5">@Html.DisplayFor(model => model.Slug)</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Department</label>
+                            <p class="fs-5">
+                                @if (Model.Department != null)
+                                {
+                                    <a asp-controller="Departments" asp-action="Details" asp-route-id="@Model.DepartmentId" class="text-decoration-none">
+                                        @Model.Department.DepartmentName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not Assigned</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">College Type</label>
+                            <p class="fs-5">
+                                <span class="badge @(Model.CollegeType == "Senior" ? "bg-primary" : "bg-info") fs-6">
+                                    @Html.DisplayFor(model => model.CollegeType)
+                                </span>
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Duration</label>
+                            <p class="fs-5">@Model.DurationYears year@(Model.DurationYears > 1 ? "s" : "")</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Credits</label>
+                            <p class="fs-5">
+                                @if (Model.Credits.HasValue)
+                                {
+                                    <span>@Model.Credits credits</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not specified</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Status</label>
+                            <p class="fs-5">
+                                @if (Model.IsDeleted)
+                                {
+                                    <span class="badge bg-danger fs-6">Inactive</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success fs-6">Active</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Subjects != null && Model.Subjects.Any())
+    {
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 text-dark fw-bold">Subjects (@Model.Subjects.Count())</h5>
+                    <a asp-controller="Subjects" asp-action="Create" asp-route-courseId="@Model.CourseId" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i> Add Subject
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="fw-bold">Subject Name</th>
+                                    <th class="fw-bold">Semester</th>
+                                    <th class="fw-bold">Credits</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var subject in Model.Subjects)
+                                {
+                                    <tr class="@(subject.IsDeleted ? "table-danger" : "")">
+                                        <td>@subject.SubjectName</td>
+                                        <td>@subject.Semester</td>
+                                        <td>@subject.Credits</td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                <a asp-controller="Subjects" asp-action="Edit" asp-route-id="@subject.SubjectId"
+                                                   class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-controller="Subjects" asp-action="Details" asp-route-id="@subject.SubjectId"
+                                                   class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="Details">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body py-5">
+                    <div class="text-center">
+                        <i class="fas fa-book text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h5 class="fw-bold">No Subjects</h5>
+                        <p class="text-muted">This course doesn't have any subjects yet.</p>
+                        <a asp-controller="Subjects" asp-action="Create" asp-route-courseId="@Model.CourseId" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus me-1"></i> Add Subject
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

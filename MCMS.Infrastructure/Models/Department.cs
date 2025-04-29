@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +12,22 @@ namespace MCMS.Infrastructure.Models;
 public partial class Department
 {
     [Key]
+    [DisplayName("Department Id")]
     public int DepartmentId { get; set; }
 
     [StringLength(100)]
+    [DisplayName("Department Name")]
     public string DepartmentName { get; set; } = null!;
 
     [StringLength(150)]
     public string Slug { get; set; } = null!;
 
     [StringLength(20)]
+    [DisplayName("College Type")]
     public string CollegeType { get; set; } = null!;
 
     [Column("HODId")]
+    [DisplayName("Head Of Department")]
     public int? Hodid { get; set; }
 
     [Column(TypeName = "datetime")]

@@ -1,47 +1,140 @@
 ﻿@model IEnumerable<MCMS.Infrastructure.Models.Faculty>
-
 @{
-    ViewData["Title"] = "Faculty";
+    ViewData["Title"] = "Faculty Members";
+    ViewData["Subtitle"] = "Manage teaching and administrative staff";
 }
 
-<h1>Faculty Members</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add New Faculty</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Post</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                <td>@(item.FirstName + " " + item.LastName)</td>
-                <td>@item.Email</td>
-                <td>@(item.Department?.DepartmentName ?? "N/A")</td>
-                <td>@item.Post</td>
-                <td>@(item.IsDeleted ? "Inactive" : "Active")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.FacultyId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.FacultyId" class="btn btn-sm btn-info">Details</a>
-                    @if (!item.IsDeleted)
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 text-dark fw-bold">Teaching Staff</h5>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add Faculty
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="fw-bold">Faculty Member</th>
+                        <th class="fw-bold">Contact</th>
+                        <th class="fw-bold">Department</th>
+                        <th class="fw-bold">Position</th>
+                        <th class="fw-bold">Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
                     {
-                        <a asp-action="Delete" asp-route-id="@item.FacultyId" class="btn btn-sm btn-danger">Delete</a>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (!string.IsNullOrEmpty(item.ProfilePictureUrl))
+                                        {
+                                            <img src="@item.ProfilePictureUrl" alt="@item.FirstName" class="rounded-circle me-2" width="40" height="40">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px">
+                                                <i class="fas fa-user text-secondary"></i>
+                                            </div>
+                                        }
+                                        <div>
+                                            <div class="fw-bold">@(item.FirstName + " " + item.LastName)</div>
+                                            @if (item.IsHod == true)
+                                            {
+                                                <span class="badge bg-primary">HOD</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <a href="mailto:@item.Email" class="text-decoration-none">@item.Email</a>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(item.PhoneNumber))
+                                    {
+                                        <div class="small text-muted">@item.PhoneNumber</div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Department != null)
+                                    {
+                                        <a asp-controller="Departments" asp-action="Details" asp-route-id="@item.DepartmentId" class="text-decoration-none">
+                                            @item.Department.DepartmentName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not Assigned</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span>@item.Post</span>
+                                </td>
+                                <td>
+                                    @if (item.IsDeleted)
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.FacultyId" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.FacultyId" class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="Details">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        @if (!item.IsDeleted)
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.FacultyId" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Restore" asp-route-id="@item.FacultyId" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Restore">
+                                                <i class="fas fa-trash-restore"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
                     else
                     {
-                        <a asp-action="Restore" asp-route-id="@item.FacultyId" class="btn btn-sm btn-success">Restore</a>
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="text-muted mb-3">
+                                    <i class="fas fa-users fa-3x"></i>
+                                </div>
+                                <h5 class="fw-bold">No faculty members found</h5>
+                                <p>There are no faculty members in the system yet.</p>
+                                <a asp-action="Create" class="btn btn-primary">
+                                    <i class="fas fa-plus me-1"></i> Add Your First Faculty Member
+                                </a>
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

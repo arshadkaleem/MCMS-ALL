@@ -1,34 +1,71 @@
-﻿@* MCMS.Web/Views/Departments/AssignHOD.cshtml *@
-@model MCMS.Web.Models.AssignHODViewModel
-
+﻿@model MCMS.Web.Models.AssignHODViewModel
 @{
     ViewData["Title"] = "Assign Head of Department";
+    ViewData["Subtitle"] = "Set or change the department head";
 }
 
-<h1>Assign Head of Department</h1>
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 text-dark fw-bold">Assign HOD for @Model.DepartmentName</h5>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+    <div class="card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <div class="d-flex">
+                    <i class="fas fa-exclamation-circle me-2 mt-1"></i>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul class="mb-0 mt-1">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-<div class="row">
-    <div class="col-md-6">
         <form asp-action="AssignHOD">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DepartmentId" />
 
-            <div class="form-group mb-3">
-                <label class="control-label">Department</label>
-                <input class="form-control" value="@Model.DepartmentName" readonly />
+            <div class="mb-4">
+                <label class="form-label fw-bold">Department</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-university"></i></span>
+                    <input class="form-control bg-light" value="@Model.DepartmentName" readonly />
+                </div>
+                <div class="form-text">This is the department to which you are assigning a Head</div>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="SelectedFacultyId" class="control-label"></label>
-                <select asp-for="SelectedFacultyId" asp-items="Model.FacultyList" class="form-control">
+            <div class="mb-4">
+                <label asp-for="SelectedFacultyId" class="form-label fw-bold">Faculty Member</label>
+                <select asp-for="SelectedFacultyId" asp-items="Model.FacultyList" class="form-select">
                     <option value="">-- Select Faculty Member --</option>
                 </select>
                 <span asp-validation-for="SelectedFacultyId" class="text-danger"></span>
+                <div class="form-text">Choose the faculty member who will serve as Head of Department</div>
             </div>
 
-            <div class="form-group mb-3">
-                <input type="submit" value="Assign" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <div class="alert alert-info d-flex mb-4">
+                <i class="fas fa-info-circle me-2 mt-1"></i>
+                <div>
+                    <strong>Important:</strong> Assigning a new HOD will replace any existing HOD for this department.
+                    The HOD is responsible for administrative duties, curriculum oversight, and departmental leadership.
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a asp-action="Details" asp-route-id="@Model.DepartmentId" class="btn btn-light me-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-tie me-1"></i> Assign HOD
+                </button>
             </div>
         </form>
     </div>
@@ -38,4 +75,16 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function() {
+            // Add select2 for better dropdown experience
+            if ($.fn.select2) {
+                $('#SelectedFacultyId').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: '-- Select Faculty Member --',
+                    allowClear: true
+                });
+            }
+        });
+    </script>
 }

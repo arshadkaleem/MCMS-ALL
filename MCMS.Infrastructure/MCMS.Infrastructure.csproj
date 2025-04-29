@@ -24,4 +24,8 @@
     <ProjectReference Include="..\MCMS.Core\MCMS.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Domain\" />
+  </ItemGroup>
+
 </Project>

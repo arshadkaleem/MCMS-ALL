@@ -1,62 +1,137 @@
 ﻿@model MCMS.Infrastructure.Models.Department
-
 @{
     ViewData["Title"] = "Department Details";
+    ViewData["Subtitle"] = "View complete information about the department";
 }
 
-<h1>Department Details</h1>
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 text-dark fw-bold">Department Information</h5>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.DepartmentId" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">@Html.DisplayNameFor(model => model.DepartmentName)</label>
+                            <p class="fs-5">@Html.DisplayFor(model => model.DepartmentName)</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">@Html.DisplayNameFor(model => model.Slug)</label>
+                            <p class="fs-5">@Html.DisplayFor(model => model.Slug)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">@Html.DisplayNameFor(model => model.CollegeType)</label>
+                            <p class="fs-5">
+                                <span class="badge @(Model.CollegeType == "Senior" ? "bg-primary" : "bg-info")">
+                                    @Html.DisplayFor(model => model.CollegeType)
+                                </span>
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold fs-6">Head of Department</label>
+                            <p class="fs-5">
+                                @if (Model.Hodid.HasValue)
+                                {
+                                    <span class="badge bg-success">Assigned</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Not Assigned</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.DepartmentName)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.DepartmentName)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.CollegeType)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.CollegeType)
-        </dd>
-    </dl>
-</div>
-
-@if (Model.Faculties != null && Model.Faculties.Any())
-{
-    <h3>Faculty Members</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Post</th>
-                <th>Joining Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var faculty in Model.Faculties)
-            {
-                <tr>
-                    <td>@(faculty.FirstName + " " + faculty.LastName)</td>
-                    <td>@faculty.Email</td>
-                    <td>@faculty.Post</td>
-                    <td>@faculty.JoiningDate.ToShortDateString()</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.DepartmentId" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    @if (Model.Faculties != null && Model.Faculties.Any())
+    {
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 text-dark fw-bold">Faculty Members (@Model.Faculties.Count())</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="fw-bold">Name</th>
+                                    <th class="fw-bold">Email</th>
+                                    <th class="fw-bold">Post</th>
+                                    <th class="fw-bold">Joining Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var faculty in Model.Faculties)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if (!string.IsNullOrEmpty(faculty.ProfilePictureUrl))
+                                                {
+                                                    <img src="@faculty.ProfilePictureUrl" alt="@faculty.FirstName" class="rounded-circle me-2" width="32" height="32">
+                                                }
+                                                else
+                                                {
+                                                    <div class="bg-light rounded-circle d-flex justify-content-center align-items-center me-2" style="width:32px;height:32px">
+                                                        <i class="fas fa-user text-secondary"></i>
+                                                    </div>
+                                                }
+                                                <div>
+                                                    <a href="@Url.Action("Details", "Faculty", new { id = faculty.FacultyId })" class="text-decoration-none">
+                                                        @(faculty.FirstName + " " + faculty.LastName)
+                                                    </a>
+                                                    @if (faculty.IsHod == true)
+                                                    {
+                                                        <span class="badge bg-primary ms-2">HOD</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="mailto:@faculty.Email" class="text-decoration-none">@faculty.Email</a>
+                                        </td>
+                                        <td>@faculty.Post</td>
+                                        <td>@faculty.JoiningDate.ToShortDateString()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body py-5">
+                    <div class="text-center">
+                        <i class="fas fa-users text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h5 class="fw-bold">No Faculty Members</h5>
+                        <p class="text-muted">This department doesn't have any assigned faculty members yet.</p>
+                        <a asp-controller="Faculty" asp-action="Create" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus me-1"></i> Add Faculty
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>

@@ -1,49 +1,130 @@
 ﻿@model IEnumerable<MCMS.Infrastructure.Models.Course>
-
 @{
     ViewData["Title"] = "Courses";
+    ViewData["Subtitle"] = "Manage all academic courses offered by the institution";
 }
 
-<h1>Courses</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add New Course</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Course Name</th>
-            <th>Department</th>
-            <th>College Type</th>
-            <th>Duration (Years)</th>
-            <th>Credits</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                <td>@item.CourseName</td>
-                <td>@(item.Department?.DepartmentName ?? "N/A")</td>
-                <td>@item.CollegeType</td>
-                <td>@item.DurationYears</td>
-                <td>@item.Credits</td>
-                <td>@(item.IsDeleted ? "Inactive" : "Active")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.CourseId" class="btn btn-sm btn-info">Details</a>
-                    @if (!item.IsDeleted)
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 text-dark fw-bold">All Courses</h5>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add Course
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="fw-bold">Course Name</th>
+                        <th class="fw-bold">Department</th>
+                        <th class="fw-bold">Type</th>
+                        <th class="fw-bold">Duration</th>
+                        <th class="fw-bold">Credits</th>
+                        <th class="fw-bold">Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
                     {
-                        <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-sm btn-danger">Delete</a>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                                <td>
+                                    <div class="fw-bold">@item.CourseName</div>
+                                    <div class="text-muted small">@item.Slug</div>
+                                </td>
+                                <td>
+                                    @if (item.Department != null)
+                                    {
+                                        <a asp-controller="Departments" asp-action="Details" asp-route-id="@item.DepartmentId" class="text-decoration-none">
+                                            @item.Department.DepartmentName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge @(item.CollegeType == "Senior" ? "bg-primary" : "bg-info")">
+                                        @item.CollegeType
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">@item.DurationYears</span> <span class="text-muted">year@(item.DurationYears > 1 ? "s" : "")</span>
+                                </td>
+                                <td>
+                                    @if (item.Credits.HasValue)
+                                    {
+                                        <span>@item.Credits credits</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsDeleted)
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip" title="Details">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        @if (!item.IsDeleted)
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Restore" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Restore">
+                                                <i class="fas fa-trash-restore"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
                     else
                     {
-                        <a asp-action="Restore" asp-route-id="@item.CourseId" class="btn btn-sm btn-success">Restore</a>
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="text-muted mb-3">
+                                    <i class="fas fa-book fa-3x"></i>
+                                </div>
+                                <h5 class="fw-bold">No courses found</h5>
+                                <p>There are no courses in the system yet.</p>
+                                <a asp-action="Create" class="btn btn-primary">
+                                    <i class="fas fa-plus me-1"></i> Add Your First Course
+                                </a>
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

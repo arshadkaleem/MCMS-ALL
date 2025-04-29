@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MCMS.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using MCMS.Infrastructure.Models;
 
 
 namespace MCMS.Infrastructure.Data

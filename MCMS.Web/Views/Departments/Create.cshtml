@@ -1,53 +1,62 @@
 ﻿@model MCMS.Infrastructure.Models.Department
-
 @{
     ViewData["Title"] = "Create Department";
+    ViewData["Subtitle"] = "Add a new academic department to the system";
 }
 
-<h1>Create Department</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-6">
-
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 text-dark fw-bold">Department Information</h5>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+    <div class="card-body">
         @if (!ViewData.ModelState.IsValid)
         {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error!</strong> Please fix the following issues:
-                <ul>
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                </ul>
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <div class="d-flex">
+                    <i class="fas fa-exclamation-circle me-2 mt-1"></i>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul class="mb-0 mt-1">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        }   
-
+        }
 
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
-                <label asp-for="DepartmentName" class="control-label"></label>
-                <input asp-for="DepartmentName" class="form-control" />
+
+            <div class="mb-4">
+                <label asp-for="DepartmentName" class="form-label fw-bold"></label>
+                <input asp-for="DepartmentName" class="form-control" placeholder="Enter department name" />
                 <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                <div class="form-text">Enter the full official name of the department</div>
             </div>
-          @*   <div class="form-group mb-3">
-                <label asp-for="Slug" class="control-label"></label>
-                <input asp-for="Slug" class="form-control" />
-                <span asp-validation-for="Slug" class="text-danger"></span>
-            </div> *@
-            <div class="form-group mb-3">
-                <label asp-for="CollegeType" class="control-label"></label>
-                <select asp-for="CollegeType" class="form-control">
+
+            <div class="mb-4">
+                <label asp-for="CollegeType" class="form-label fw-bold"></label>
+                <select asp-for="CollegeType" class="form-select">
+                    <option value="">-- Select College Type --</option>
                     <option value="Senior">Senior</option>
                     <option value="Junior">Junior</option>
                 </select>
                 <span asp-validation-for="CollegeType" class="text-danger"></span>
+                <div class="form-text">Select whether this department belongs to senior or junior college</div>
             </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a asp-action="Index" class="btn btn-light me-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i> Create Department
+                </button>
             </div>
         </form>
     </div>
@@ -57,4 +66,14 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        // Generate slug automatically from the department name
+        $(document).ready(function() {
+            $('#DepartmentName').on('blur', function() {
+                // This would typically call an endpoint to generate a slug,
+                // but as the Slug field is commented out in the original form,
+                // this is just a placeholder for future implementation
+            });
+        });
+    </script>
 }

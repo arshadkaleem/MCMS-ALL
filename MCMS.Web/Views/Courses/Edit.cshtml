@@ -1,12 +1,12 @@
 ﻿@model MCMS.Infrastructure.Models.Course
 @{
-    ViewData["Title"] = "Add Course";
-    ViewData["Subtitle"] = "Create a new academic course in the system";
+    ViewData["Title"] = "Edit Course";
+    ViewData["Subtitle"] = "Modify course information";
 }
 
 <div class="card shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-        <h5 class="mb-0 text-dark fw-bold">Course Information</h5>
+        <h5 class="mb-0 text-dark fw-bold">Edit Course Information</h5>
         <a asp-action="Index" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-1"></i> Back to List
         </a>
@@ -31,8 +31,9 @@
             </div>
         }
 
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CourseId" />
 
             <div class="row">
                 <div class="col-md-6">
@@ -50,7 +51,7 @@
                             <input asp-for="Slug" class="form-control" placeholder="course-slug" />
                         </div>
                         <span asp-validation-for="Slug" class="text-danger"></span>
-                        <div class="form-text">URL-friendly version of course name (auto-generated)</div>
+                        <div class="form-text">URL-friendly version of course name</div>
                     </div>
 
                     <div class="mb-4">
@@ -67,7 +68,6 @@
                     <div class="mb-4">
                         <label asp-for="CollegeType" class="form-label fw-bold"></label>
                         <select asp-for="CollegeType" class="form-select">
-                            <option value="">-- Select College Type --</option>
                             <option value="Senior">Senior</option>
                             <option value="Junior">Junior</option>
                         </select>
@@ -78,7 +78,7 @@
                     <div class="mb-4">
                         <label asp-for="DurationYears" class="form-label fw-bold"></label>
                         <div class="input-group">
-                            <input asp-for="DurationYears" class="form-control" type="number" min="1" max="10" placeholder="3" />
+                            <input asp-for="DurationYears" class="form-control" type="number" min="1" max="10" />
                             <span class="input-group-text">year(s)</span>
                         </div>
                         <span asp-validation-for="DurationYears" class="text-danger"></span>
@@ -88,7 +88,7 @@
                     <div class="mb-4">
                         <label asp-for="Credits" class="form-label fw-bold"></label>
                         <div class="input-group">
-                            <input asp-for="Credits" class="form-control" type="number" min="1" placeholder="120" />
+                            <input asp-for="Credits" class="form-control" type="number" min="1" />
                             <span class="input-group-text">credits</span>
                         </div>
                         <span asp-validation-for="Credits" class="text-danger"></span>
@@ -98,9 +98,9 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <a asp-action="Index" class="btn btn-light me-2">Cancel</a>
+                <a asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-light me-2">Cancel</a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-1"></i> Create Course
+                    <i class="fas fa-save me-1"></i> Save Changes
                 </button>
             </div>
         </form>
@@ -112,8 +112,9 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        // Auto-generate slug from course name if user starts editing the name
         $(document).ready(function() {
-            // Auto-generate slug from course name
+            let originalName = $('#CourseName').val();
             let slugModified = false;
 
             $('#Slug').on('change', function() {

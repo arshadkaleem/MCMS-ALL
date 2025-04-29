@@ -45,7 +45,7 @@ namespace MCMS.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var departments = await _unitOfWork.Departments.GetAllAsync();
-            ViewData["DepartmentId"] = new SelectList(departments, "DepartmentId", "DepartmentName");
+            ViewData["DepartmentId"] = new SelectList(departments.OrderBy(d => d.DepartmentName), "DepartmentId", "DepartmentName");
             return View();
         }
 

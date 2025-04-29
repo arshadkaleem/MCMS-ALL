@@ -2,90 +2,183 @@
 
 @{
     ViewData["Title"] = "Edit Faculty";
+    ViewData["Subtitle"] = $"Update information for {Model.FirstName} {Model.LastName}";
 }
 
-<h1>Edit Faculty</h1>
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 text-dark fw-bold">Faculty Information</h5>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+    <div class="card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <div class="d-flex">
+                    <i class="fas fa-exclamation-circle me-2 mt-1"></i>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul class="mb-0 mt-1">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="FacultyId" />
-            <div class="row">
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="row mb-4">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Basic Information</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="FirstName" class="form-label fw-semibold"></label>
+                                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                                    <span asp-validation-for="FirstName" class="text-danger mt-1 d-block"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="LastName" class="form-label fw-semibold"></label>
+                                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                                    <span asp-validation-for="LastName" class="text-danger mt-1 d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input asp-for="Email" type="email" class="form-control" placeholder="Enter email address" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger mt-1 d-block"></span>
+                                <div class="form-text">This email is also used for login</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
+                                </div>
+                                <span asp-validation-for="PhoneNumber" class="text-danger mt-1 d-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Employment Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label asp-for="Post" class="form-label fw-semibold"></label>
+                                <input asp-for="Post" class="form-control" placeholder="E.g. Assistant Professor" />
+                                <span asp-validation-for="Post" class="text-danger mt-1 d-block"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="DepartmentId" class="form-label fw-semibold">Department</label>
+                                <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId">
+                                    <option value="">-- Select Department --</option>
+                                </select>
+                                <span asp-validation-for="DepartmentId" class="text-danger mt-1 d-block"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="JoiningDate" class="form-label fw-semibold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input asp-for="JoiningDate" type="date" class="form-control" />
+                                </div>
+                                <span asp-validation-for="JoiningDate" class="text-danger mt-1 d-block"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input id="IsHod" name="IsHod" class="form-check-input" type="checkbox" role="switch"
+                                    @(Model.IsHod == true ? "checked" : "") />
+                                    <label for="IsHod" class="form-check-label">Assign as Head of Department</label>
+                                    <div class="form-text">This will replace the current HOD of the selected department</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="PhoneNumber" class="control-label"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="Post" class="control-label"></label>
-                    <input asp-for="Post" class="form-control" />
-                    <span asp-validation-for="Post" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="DepartmentId" class="control-label">Department</label>
-                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"></select>
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6 mb-3">
-                    <label asp-for="JoiningDate" class="control-label"></label>
-                    <input asp-for="JoiningDate" class="form-control" type="date" />
-                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6 mb-3">
-                    <div class="form-check mt-4">
-                        <input asp-for="IsHod" class="form-check-input" />
-                        <label asp-for="IsHod" class="form-check-label">Is Head of Department</label>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Contact Information</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label asp-for="Address" class="form-label fw-semibold"></label>
+                                <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter full address"></textarea>
+                                <span asp-validation-for="Address" class="text-danger mt-1 d-block"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="City" class="form-label fw-semibold"></label>
+                                    <input asp-for="City" class="form-control" placeholder="City" />
+                                    <span asp-validation-for="City" class="text-danger mt-1 d-block"></span>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="State" class="form-label fw-semibold"></label>
+                                    <input asp-for="State" class="form-control" placeholder="State" />
+                                    <span asp-validation-for="State" class="text-danger mt-1 d-block"></span>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="ZipCode" class="form-label fw-semibold"></label>
+                                    <input asp-for="ZipCode" class="form-control" placeholder="Zip code" />
+                                    <span asp-validation-for="ZipCode" class="text-danger mt-1 d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ProfilePictureUrl" class="form-label fw-semibold">Profile Picture URL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                    <input asp-for="ProfilePictureUrl" class="form-control" placeholder="URL to profile image" />
+                                </div>
+                                <span asp-validation-for="ProfilePictureUrl" class="text-danger mt-1 d-block"></span>
+                                <div class="form-text">Enter URL to an existing image</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Cvurl" class="form-label fw-semibold">CV/Resume URL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-file-pdf"></i></span>
+                                    <input asp-for="Cvurl" class="form-control" placeholder="URL to CV/Resume" />
+                                </div>
+                                <span asp-validation-for="Cvurl" class="text-danger mt-1 d-block"></span>
+                                <div class="form-text">Enter URL to CV or resume document</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-4 mb-3">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <label asp-for="State" class="control-label"></label>
-                    <input asp-for="State" class="form-control" />
-                    <span asp-validation-for="State" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                    <label asp-for="ZipCode" class="control-label"></label>
-                    <input asp-for="ZipCode" class="form-control" />
-                    <span asp-validation-for="ZipCode" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a asp-action="Details" asp-route-id="@Model.FacultyId" class="btn btn-light me-2">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i> Save Changes
+                </button>
             </div>
         </form>
     </div>
@@ -95,4 +188,14 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function () {
+            // Show alert if validation fails
+            if ($('.validation-summary-errors li').length > 0) {
+                $('.validation-summary-errors').addClass('d-block');
+            } else {
+                $('.validation-summary-errors').addClass('d-none');
+            }
+        });
+    </script>
 }
