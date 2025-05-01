@@ -1,50 +1,80 @@
-﻿// Views/Categories/Create.cshtml
-@model MCMS.Infrastructure.Models.Category
-
+﻿@model MCMS.Infrastructure.Models.Category
 @{
     ViewData["Title"] = "Create Category";
+    ViewData["Subtitle"] = "Add a new content category to your website";
 }
 
-<div class="container-fluid">
-    <h2>Create Category</h2>
-    <hr />
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Category Details</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group mb-3">
-                            <label asp-for="CategoryName" class="control-label"></label>
-                            <input asp-for="CategoryName" class="form-control" />
-                            <span asp-validation-for="CategoryName" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="CategoryName" class="form-label">Category Name</label>
+                        <input asp-for="CategoryName" class="form-control" autofocus />
+                        <span asp-validation-for="CategoryName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Slug" class="form-label">URL Slug</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">content/category/</span>
+                            <input asp-for="Slug" class="form-control" placeholder="Enter slug or leave empty to auto-generate" />
                         </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Slug" class="control-label"></label>
-                            <div class="input-group">
-                                <span class="input-group-text">content/category/</span>
-                                <input asp-for="Slug" class="form-control" placeholder="Leave empty to generate automatically" />
-                            </div>
-                            <span asp-validation-for="Slug" class="text-danger"></span>
-                            <small class="form-text text-muted">The slug is used in the URL. Leave empty to generate automatically from the name.</small>
+                        <span asp-validation-for="Slug" class="text-danger"></span>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle text-muted me-1"></i>
+                            The slug will be used in URLs. Leave empty to generate automatically from the name.
                         </div>
-                        <div class="form-group mt-4">
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Create Category
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>About Categories</h5>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i> Help Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="fw-bold">What are categories?</h6>
+                    <p class="text-muted mb-0">
+                        Categories help organize your content into logical groups that make it easier for users to navigate your website.
+                    </p>
                 </div>
-                <div class="card-body">
-                    <p>Categories help organize your content into logical groups.</p>
-                    <p>Each category can contain multiple pages and be used for easy navigation.</p>
+
+                <div class="mb-3">
+                    <h6 class="fw-bold">Best practices</h6>
+                    <ul class="text-muted mb-0">
+                        <li>Use clear, descriptive names</li>
+                        <li>Keep the total number of categories manageable</li>
+                        <li>Consider your website structure</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h6 class="fw-bold">URL Slugs</h6>
+                    <p class="text-muted mb-0">
+                        Slugs are used in URLs and should be short, descriptive, and contain only lowercase letters, numbers, and hyphens.
+                    </p>
                 </div>
             </div>
         </div>
@@ -55,17 +85,19 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
     <script>
-        // Auto-generate slug from name
         $(document).ready(function() {
+            // Auto-generate slug from category name
             $("#CategoryName").on("keyup", function() {
-                if ($("#Slug").val() === "") {
-                    var name = $(this).val();
-                    var slug = name.toLowerCase()
-                        .replace(/[^a-z0-9\s-]/g, "")   // Remove special chars
-                        .replace(/\s+/g, "-")           // Replace spaces with dashes
-                        .replace(/-+/g, "-")            // Prevent multiple dashes
-                        .replace(/^-+|-+$/g, "");       // Trim dashes from start/end
+                if (!$("#Slug").val()) {
+                    let name = $(this).val();
+                    let slug = name.toLowerCase()
+                        .replace(/[^\w\s-]/g, "")    // Remove special chars except spaces and hyphens
+                        .replace(/\s+/g, "-")        // Replace spaces with hyphens
+                        .replace(/-+/g, "-")         // Collapse multiple hyphens
+                        .replace(/^-+|-+$/g, "");    // Trim hyphens from ends
+
                     $("#Slug").val(slug);
                 }
             });

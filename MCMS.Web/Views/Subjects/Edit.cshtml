@@ -1,61 +1,233 @@
 ﻿@model MCMS.Infrastructure.Models.Subject
-
 @{
     ViewData["Title"] = "Edit Subject";
+    ViewData["Subtitle"] = "Update subject information";
 }
 
-<h1>Edit Subject</h1>
-
-<hr />
 <div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SubjectId" />
-            <div class="form-group mb-3">
-                <label asp-for="SubjectName" class="control-label"></label>
-                <input asp-for="SubjectName" class="form-control" />
-                <span asp-validation-for="SubjectName" class="text-danger"></span>
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 text-primary">
+                        <i class="fas fa-edit me-2"></i>Edit Subject
+                    </h5>
+                    <span class="badge bg-warning rounded-pill px-3 py-2">
+                        ID: @Model.SubjectId
+                    </span>
+                </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Slug" class="control-label"></label>
-                <input asp-for="Slug" class="form-control" />
-                <span asp-validation-for="Slug" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    <input type="hidden" asp-for="SubjectId" />
+
+                    <!-- Basic Information Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Basic Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="SubjectName" class="form-control" placeholder="Enter subject name" />
+                                    <label asp-for="SubjectName">Subject Name</label>
+                                    <span asp-validation-for="SubjectName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="Slug" class="form-control" placeholder="Enter subject slug" id="Slug" />
+                                    <label asp-for="Slug">URL Slug</label>
+                                    <span asp-validation-for="Slug" class="text-danger"></span>
+                                    <div class="form-text text-muted small">
+                                        The slug will be used in URLs. Use lowercase letters, numbers, and hyphens only.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department & Course Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Department & Course</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"
+                                            aria-label="Select department" id="DepartmentId">
+                                    </select>
+                                    <label asp-for="DepartmentId">Department</label>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="CourseId" class="form-select" asp-items="ViewBag.CourseId"
+                                            aria-label="Select course" id="CourseId">
+                                    </select>
+                                    <label asp-for="CourseId">Course</label>
+                                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Semester & Credits Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Semester & Credits</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="Semester" class="form-select" aria-label="Select semester">
+                                        <option value="Semester 1">Semester 1</option>
+                                        <option value="Semester 2">Semester 2</option>
+                                        <option value="Semester 3">Semester 3</option>
+                                        <option value="Semester 4">Semester 4</option>
+                                        <option value="Semester 5">Semester 5</option>
+                                        <option value="Semester 6">Semester 6</option>
+                                        <option value="Semester 7">Semester 7</option>
+                                        <option value="Semester 8">Semester 8</option>
+                                    </select>
+                                    <label asp-for="Semester">Semester</label>
+                                    <span asp-validation-for="Semester" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="Credits" class="form-control" type="number" min="1" placeholder="Credits" />
+                                    <label asp-for="Credits">Credits</label>
+                                    <span asp-validation-for="Credits" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Information Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">System Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-text mb-2">
+                                    <span class="fw-bold">Created:</span>
+                                    <span class="text-muted">@(Model.CreatedAt?.ToString("MMM dd, yyyy HH:mm") ?? "N/A")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-text mb-2">
+                                    <span class="fw-bold">Last Updated:</span>
+                                    <span class="text-muted">@(Model.UpdatedAt?.ToString("MMM dd, yyyy HH:mm") ?? "N/A")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="border-top pt-4 mt-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <a asp-action="Index" class="btn btn-outline-secondary me-2">
+                                    <i class="fas fa-arrow-left me-1"></i> Back to List
+                                </a>
+                                <a asp-action="Details" asp-route-id="@Model.SubjectId" class="btn btn-outline-info">
+                                    <i class="fas fa-eye me-1"></i> View Details
+                                </a>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="CourseId" class="control-label">Course</label>
-                <select asp-for="CourseId" class="form-select" asp-items="ViewBag.CourseId"></select>
-                <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Side information panel -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle me-2 text-primary"></i>Editing Tips
+                </h5>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="DepartmentId" class="control-label">Department</label>
-                <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"></select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Important Notes</h6>
+                    <ul class="mb-0 ps-3">
+                        <li>Changing the department may affect course availability</li>
+                        <li>URL slug must remain unique across all subjects</li>
+                        <li>Changes will be immediately visible to all users</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4">
+                    <h6 class="fw-bold mb-2"><i class="fas fa-link me-2 text-primary"></i>Related Links</h6>
+                    <div class="list-group">
+                        <a href="/FacultySubjects/Index?subjectId=@Model.SubjectId" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span>Manage assigned faculty</span>
+                            <i class="fas fa-chevron-right text-muted"></i>
+                        </a>
+                        <a href="/Timetable/Index?subjectId=@Model.SubjectId" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span>View timetable entries</span>
+                            <i class="fas fa-chevron-right text-muted"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Credits" class="control-label"></label>
-                <input asp-for="Credits" class="form-control" type="number" min="1" />
-                <span asp-validation-for="Credits" class="text-danger"></span>
+        </div>
+
+        <!-- Delete/restore options -->
+        <div class="card shadow-sm @(Model.IsDeleted ? "border-success" : "border-danger")">
+            <div class="card-header @(Model.IsDeleted ? "bg-success text-white" : "bg-danger text-white") py-3">
+                <h5 class="card-title mb-0">
+                    @if (Model.IsDeleted)
+                    {
+                        <i class="fas fa-trash-restore me-2">
+                            Restore Subject
+                        </i>
+                            }
+                    else
+                    {
+                        <i class="fas fa-trash-alt me-2">
+                            Delete Subject
+                        </i>
+                            }
+                </h5>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Semester" class="control-label"></label>
-                <select asp-for="Semester" class="form-select">
-                    <option value="Semester 1">Semester 1</option>
-                    <option value="Semester 2">Semester 2</option>
-                    <option value="Semester 3">Semester 3</option>
-                    <option value="Semester 4">Semester 4</option>
-                    <option value="Semester 5">Semester 5</option>
-                    <option value="Semester 6">Semester 6</option>
-                    <option value="Semester 7">Semester 7</option>
-                    <option value="Semester 8">Semester 8</option>
-                </select>
-                <span asp-validation-for="Semester" class="text-danger"></span>
+            <div class="card-body">
+                @if (Model.IsDeleted)
+                {
+                    <p class="mb-3">
+                        This subject is currently inactive (deleted). Restoring it will make it visible in all menus and lists again.
+                    </p>
+                    <form asp-action="Restore" asp-route-id="@Model.SubjectId" onsubmit="return confirm('Are you sure you want to restore this subject?')">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-trash-restore me-1"></i> Restore Subject
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <p class="mb-3">
+                        Deleting this subject will hide it from menus and lists, but all data will be preserved.
+                        This action can be reversed later.
+                    </p>
+                    <form asp-action="Delete" asp-route-id="@Model.SubjectId" onsubmit="return confirm('Are you sure you want to delete this subject?')">
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-trash-alt me-1"></i> Delete Subject
+                        </button>
+                    </form>
+                }
             </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+            @if (Model.IsDeleted)
+            {
+                <div class="card-footer bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Deleted on: @(Model.DeletedAt?.ToString("MMM dd, yyyy HH:mm") ?? "Unknown")
+                    </small>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -63,4 +235,57 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Auto-generate slug from subject name if slug field is empty
+        $(document).ready(function() {
+            $('#SubjectName').on('keyup', function() {
+                var name = $(this).val();
+                var currentSlug = $('#Slug').val();
+
+                // Only auto-generate slug if it hasn't been set yet or matches previous auto-generated version
+                if (!currentSlug || $('#Slug').data('auto-generated')) {
+                    var slug = name.toLowerCase()
+                        .replace(/[^\w\s-]/g, '') // Remove special characters
+                        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+                        .replace(/-+/g, '-');     // Replace multiple hyphens with single hyphen
+
+                    $('#Slug').val(slug);
+                    $('#Slug').data('auto-generated', true);
+                }
+            });
+
+            // Mark slug as manually edited when user types in it
+            $('#Slug').on('keyup', function() {
+                $(this).data('auto-generated', false);
+            });
+
+            // Update available courses when department changes
+            $('#DepartmentId').change(function() {
+                var departmentId = $(this).val();
+                var currentCourseId = $('#CourseId').val();
+
+                if (departmentId) {
+                    // This would be implemented in the controller to return courses for the selected department
+                    $.get('/Subjects/GetCoursesByDepartment', { departmentId: departmentId }, function(data) {
+                        var courseSelect = $('#CourseId');
+                        var currentCourseStillValid = false;
+
+                        courseSelect.empty();
+                        $.each(data, function(index, item) {
+                            courseSelect.append($('<option>').val(item.value).text(item.text));
+                            if (item.value == currentCourseId) {
+                                currentCourseStillValid = true;
+                            }
+                        });
+
+                        // If current course is valid for new department, keep it selected
+                        if (currentCourseStillValid) {
+                            courseSelect.val(currentCourseId);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

@@ -1,64 +1,146 @@
 ﻿@model IEnumerable<MCMS.Infrastructure.Models.Category>
-
 @{
-    ViewData["Title"] = "Content Categories";
+    ViewData["Title"] = "Categories";
+    ViewData["Subtitle"] = "Manage content categories for your website";
 }
 
-<div class="container-fluid">
-    <h2>Content Categories</h2>
-    <p>
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Create New Category
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">All Categories</h6>
+        <a asp-action="Create" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Add New Category
         </a>
-    </p>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>@Html.DisplayNameFor(model => model.CategoryName)</th>
-                            <th>@Html.DisplayNameFor(model => model.Slug)</th>
-                            <th>Created</th>
-                            <th>Updated</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="categoriesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Slug</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th width="150">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Slug)</td>
-                                <td>@(item.CreatedAt?.ToString("yyyy-MM-dd") ?? "N/A")</td>
-                                <td>@(item.UpdatedAt?.ToString("yyyy-MM-dd") ?? "N/A")</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i> Edit
+                                    <span class="fw-medium">@item.CategoryName</span>
+                                </td>
+                                <td><code>@item.Slug</code></td>
+                                <td>@(item.CreatedAt?.ToString("MMM dd, yyyy") ?? "N/A")</td>
+                                <td>@(item.UpdatedAt?.ToString("MMM dd, yyyy") ?? "N/A")</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-sm btn-info">
-                                            <i class="fas fa-info-circle"></i> Details
+                                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-info-circle"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-id="@item.CategoryId"
+                                                data-name="@item.CategoryName">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center py-5">
+                                    <i class="fas fa-folder-open text-muted mb-3" style="font-size: 3rem;"></i>
+                                    <h5 class="text-muted">No categories found</h5>
+                                    <p class="text-muted">Get started by creating a new category</p>
+                                    <a asp-action="Create" class="btn btn-primary mt-2">
+                                        <i class="fas fa-plus me-1"></i> Add Category
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the category "<span id="categoryName"></span>"?
+                <p class="text-danger mt-3 mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    This action cannot be undone and may affect content using this category.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    <input type="hidden" id="categoryId" name="id" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+
+                $('#categoryId').val(id);
+                $('#categoryName').text(name);
+            });
+
+            // Initialize DataTable if you have jQuery DataTables included
+            if ($.fn.DataTable) {
+                $('#categoriesTable').DataTable({
+                    "pageLength": 10,
+                    "language": {
+                        "emptyTable": "No categories found"
+                    },
+                    "columnDefs": [
+                        { "orderable": false, "targets": 4 }
+                    ]
+                });
+            }
+        });
+    </script>
+}

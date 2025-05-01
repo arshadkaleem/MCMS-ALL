@@ -1,49 +1,106 @@
 ﻿@model IEnumerable<MCMS.Infrastructure.Models.Subject>
-
 @{
     ViewData["Title"] = "Subjects";
+    ViewData["Subtitle"] = "Manage academic subjects across all departments and courses";
 }
 
-<h1>Subjects</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add New Subject</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Subject Name</th>
-            <th>Course</th>
-            <th>Department</th>
-            <th>Semester</th>
-            <th>Credits</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                <td>@item.SubjectName</td>
-                <td>@(item.Course?.CourseName ?? "N/A")</td>
-                <td>@(item.Department?.DepartmentName ?? "N/A")</td>
-                <td>@item.Semester</td>
-                <td>@item.Credits</td>
-                <td>@(item.IsDeleted ? "Inactive" : "Active")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.SubjectId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.SubjectId" class="btn btn-sm btn-info">Details</a>
-                    @if (!item.IsDeleted)
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="card-title mb-0 text-primary">
+            <i class="fas fa-book me-2"></i>All Subjects
+        </h5>
+        <div>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add New Subject
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="fw-bold">Subject Name</th>
+                        <th class="fw-bold">Course</th>
+                        <th class="fw-bold">Department</th>
+                        <th class="fw-bold">Semester</th>
+                        <th class="fw-bold text-center">Credits</th>
+                        <th class="fw-bold text-center">Status</th>
+                        <th class="fw-bold text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
                     {
-                        <a asp-action="Delete" asp-route-id="@item.SubjectId" class="btn btn-sm btn-danger">Delete</a>
+                        <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded p-2 me-3">
+                                        <i class="fas fa-book text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold">@item.SubjectName</span>
+                                        <small class="d-block text-muted">@item.Slug</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@(item.Course?.CourseName ?? "N/A")</td>
+                            <td>@(item.Department?.DepartmentName ?? "N/A")</td>
+                            <td>@item.Semester</td>
+                            <td class="text-center">
+                                <span class="badge bg-info rounded-pill">@item.Credits</span>
+                            </td>
+                            <td class="text-center">
+                                @if (!item.IsDeleted)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <a asp-action="Details" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-info me-1" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-warning me-1" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @if (!item.IsDeleted)
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Restore" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-success" title="Restore">
+                                            <i class="fas fa-trash-restore"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
                     }
-                    else
+                    @if (!Model.Any())
                     {
-                        <a asp-action="Restore" asp-route-id="@item.SubjectId" class="btn btn-sm btn-success">Restore</a>
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                                    <h6 class="fw-bold">No subjects found</h6>
+                                    <p class="text-muted">Try adding a new subject or changing your search criteria</p>
+                                    <a asp-action="Create" class="btn btn-primary mt-2">
+                                        <i class="fas fa-plus me-1"></i> Add New Subject
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,60 +1,142 @@
 ﻿@model MCMS.Infrastructure.Models.Subject
-
 @{
     ViewData["Title"] = "Add Subject";
+    ViewData["Subtitle"] = "Create a new academic subject";
 }
 
-<h1>Add New Subject</h1>
-
-<hr />
 <div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
-                <label asp-for="SubjectName" class="control-label"></label>
-                <input asp-for="SubjectName" class="form-control" />
-                <span asp-validation-for="SubjectName" class="text-danger"></span>
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0 text-primary">
+                    <i class="fas fa-book-medical me-2"></i>Create New Subject
+                </h5>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Slug" class="control-label"></label>
-                <input asp-for="Slug" class="form-control" />
-                <span asp-validation-for="Slug" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Basic Information Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Basic Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="SubjectName" class="form-control" placeholder="Enter subject name" />
+                                    <label asp-for="SubjectName">Subject Name</label>
+                                    <span asp-validation-for="SubjectName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="Slug" class="form-control" placeholder="Enter subject slug" />
+                                    <label asp-for="Slug">URL Slug</label>
+                                    <span asp-validation-for="Slug" class="text-danger"></span>
+                                    <div class="form-text text-muted small">
+                                        The slug will be used in URLs. Use lowercase letters, numbers, and hyphens only.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department & Course Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Department & Course</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"
+                                            aria-label="Select department">
+                                        <option value="">-- Select Department --</option>
+                                    </select>
+                                    <label asp-for="DepartmentId">Department</label>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="CourseId" class="form-select" asp-items="ViewBag.CourseId"
+                                            aria-label="Select course">
+                                        <option value="">-- Select Course --</option>
+                                    </select>
+                                    <label asp-for="CourseId">Course</label>
+                                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Semester & Credits Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Semester & Credits</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <select asp-for="Semester" class="form-select" aria-label="Select semester">
+                                        <option value="">-- Select Semester --</option>
+                                        <option value="Semester 1">Semester 1</option>
+                                        <option value="Semester 2">Semester 2</option>
+                                        <option value="Semester 3">Semester 3</option>
+                                        <option value="Semester 4">Semester 4</option>
+                                        <option value="Semester 5">Semester 5</option>
+                                        <option value="Semester 6">Semester 6</option>
+                                        <option value="Semester 7">Semester 7</option>
+                                        <option value="Semester 8">Semester 8</option>
+                                    </select>
+                                    <label asp-for="Semester">Semester</label>
+                                    <span asp-validation-for="Semester" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input asp-for="Credits" class="form-control" type="number" min="1" placeholder="Credits" />
+                                    <label asp-for="Credits">Credits</label>
+                                    <span asp-validation-for="Credits" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="border-top pt-4 mt-4">
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Create Subject
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="CourseId" class="control-label">Course</label>
-                <select asp-for="CourseId" class="form-select" asp-items="ViewBag.CourseId"></select>
-                <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Helpful information panel -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm bg-light">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-info-circle me-2 text-primary"></i>
+                    Subject Information
+                </h5>
+                <p class="card-text text-muted">
+                    Subjects are individual units of study within courses. Each subject is
+                    associated with a specific department and course.
+                </p>
+                <div class="alert alert-info">
+                    <h6 class="alert-heading fw-bold"><i class="fas fa-lightbulb me-2"></i>Tips</h6>
+                    <ul class="mb-0 ps-3">
+                        <li>Choose a clear, descriptive name for the subject</li>
+                        <li>The slug must be unique across all subjects</li>
+                        <li>Credits typically range from 1 to 6 based on the subject's workload</li>
+                        <li>Select the appropriate semester for proper curriculum planning</li>
+                    </ul>
+                </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="DepartmentId" class="control-label">Department</label>
-                <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"></select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Credits" class="control-label"></label>
-                <input asp-for="Credits" class="form-control" type="number" min="1" />
-                <span asp-validation-for="Credits" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Semester" class="control-label"></label>
-                <select asp-for="Semester" class="form-select">
-                    <option value="Semester 1">Semester 1</option>
-                    <option value="Semester 2">Semester 2</option>
-                    <option value="Semester 3">Semester 3</option>
-                    <option value="Semester 4">Semester 4</option>
-                    <option value="Semester 5">Semester 5</option>
-                    <option value="Semester 6">Semester 6</option>
-                    <option value="Semester 7">Semester 7</option>
-                    <option value="Semester 8">Semester 8</option>
-                </select>
-                <span asp-validation-for="Semester" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -62,4 +144,44 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Auto-generate slug from subject name
+        $(document).ready(function() {
+            $('#SubjectName').on('keyup', function() {
+                var name = $(this).val();
+
+                // If slug field hasn't been manually edited, auto-generate it
+                if (!$('#Slug').data('manually-edited')) {
+                    var slug = name.toLowerCase()
+                        .replace(/[^\w\s-]/g, '') // Remove special characters
+                        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+                        .replace(/-+/g, '-');     // Replace multiple hyphens with single hyphen
+
+                    $('#Slug').val(slug);
+                }
+            });
+
+            // Mark slug as manually edited when user types in it
+            $('#Slug').on('keyup', function() {
+                $(this).data('manually-edited', true);
+            });
+
+            // Update available courses when department changes
+            $('#DepartmentId').change(function() {
+                var departmentId = $(this).val();
+                if (departmentId) {
+                    // This would be implemented in the controller to return courses for the selected department
+                    $.get('/Subjects/GetCoursesByDepartment', { departmentId: departmentId }, function(data) {
+                        var courseSelect = $('#CourseId');
+                        courseSelect.empty();
+                        courseSelect.append($('<option>').val('').text('-- Select Course --'));
+                        $.each(data, function(index, item) {
+                            courseSelect.append($('<option>').val(item.value).text(item.text));
+                        });
+                    });
+                }
+            });
+        });
+    </script>
 }
